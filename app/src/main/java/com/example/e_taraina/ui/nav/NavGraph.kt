@@ -1,0 +1,42 @@
+package com.example.e_taraina.ui.nav
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.e_taraina.ui.features.home.HomeScreen
+import com.example.e_taraina.ui.features.login.LoginScreen
+
+@Composable
+fun ETarainaNavGraph(
+    navController: NavHostController = rememberNavController()
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Login.route
+    ) {
+        composable(Screen.Login.route) {
+            LoginScreen(
+                onLoginSuccess = { username, _ ->
+                    // Role routing (Home-user vs Home-admin) can branch here
+                    // once Home-admin is wired up. For now everyone lands
+                    // on Home-user, matching what's been built so far.
+                    navController.navigate(Screen.Home.createRoute(username)) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Home.route,
+            arguments = listOf(navArgument(Screen.Home.ARG_USERNAME) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString(Screen.Home.ARG_USERNAME).orEmpty()
+            HomeScreen(username = username)
+        }
+    }
+}
