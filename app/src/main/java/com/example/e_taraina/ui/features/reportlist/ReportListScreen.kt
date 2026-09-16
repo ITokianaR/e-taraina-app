@@ -69,7 +69,8 @@ fun ReportListScreen() {
                 complaints.forEach { complaint ->
                     ComplaintCard(
                         complaint = complaint,
-                        onEditClick = { editingComplaint = complaint }
+                        onEditClick = { editingComplaint = complaint },
+                        onDeleteClick = { ComplaintStore.delete(complaint.id) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -86,7 +87,11 @@ fun ReportListScreen() {
 }
 
 @Composable
-private fun ComplaintCard(complaint: Complaint, onEditClick: () -> Unit) {
+private fun ComplaintCard(
+    complaint: Complaint,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -130,6 +135,13 @@ private fun ComplaintCard(complaint: Complaint, onEditClick: () -> Unit) {
         ETarainaButton(
             text = "Modifier",
             onClick = onEditClick
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ETarainaButton(
+            text = "Supprimer",
+            onClick = onDeleteClick
         )
     }
 }

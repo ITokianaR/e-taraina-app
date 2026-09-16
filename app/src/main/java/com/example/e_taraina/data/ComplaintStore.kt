@@ -32,4 +32,8 @@ object ComplaintStore {
             list.map { if (it.id == complaint.id) complaint else it }
         }
     }
+
+    fun delete(id: String) {
+        _complaints.update { list -> list.filter { it.id != id } }
+    }
 }
