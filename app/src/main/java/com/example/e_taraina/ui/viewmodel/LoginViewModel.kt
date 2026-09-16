@@ -25,11 +25,8 @@ sealed interface LoginEvent {
     data class NavigateHome(val username: String, val role: UserRole) : LoginEvent
 }
 
-/**
- * @JvmOverloads generates a no-arg constructor from the default
- * parameter, so Compose's `viewModel()` can instantiate this via
- * reflection without a custom factory.
- */
+// @JvmOverloads pour avoir un constructeur sans argument, sinon viewModel()
+// dans Compose sait pas instancier ça tout seul (pas de factory custom)
 class LoginViewModel @JvmOverloads constructor(
     private val loginUseCase: LoginUseCase = AppModule.loginUseCase
 ) : ViewModel() {

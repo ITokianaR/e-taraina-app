@@ -12,10 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.e_taraina.ui.common.theme.ETarainaGreen
 
-/**
- * Full-width branded button. Reused for the login CTA (green) and the
- * "Fill a complaint" CTA on Home-user (red) by overriding [containerColor].
- */
+// bouton réutilisé partout dans l'app, on change juste la couleur selon
+// le contexte (vert pour login, rouge pour "Fill a complaint", etc.)
 @Composable
 fun ETarainaButton(
     text: String,

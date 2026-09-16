@@ -22,9 +22,8 @@ fun ETarainaNavGraph(
         composable(Screen.Login.route) {
             LoginScreen(
                 onLoginSuccess = { username, _ ->
-                    // Role routing (Home-user vs Home-admin) can branch here
-                    // once Home-admin is wired up. For now everyone lands
-                    // on Home-user, matching what's been built so far.
+                    // TODO: gérer le rôle ici pour envoyer les admins sur Home-admin,
+                    // pour l'instant tout le monde atterrit sur Home-user
                     navController.navigate(Screen.Home.createRoute(username)) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }

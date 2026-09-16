@@ -1,4 +1,3 @@
-// Color.kt
 package com.example.e_taraina.ui.common.theme
 
 import androidx.compose.ui.graphics.Color

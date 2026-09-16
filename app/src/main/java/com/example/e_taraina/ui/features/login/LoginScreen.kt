@@ -25,13 +25,8 @@ import com.example.e_taraina.ui.common.theme.ETarainaGreen
 import com.example.e_taraina.ui.viewmodel.LoginEvent
 import com.example.e_taraina.ui.viewmodel.LoginViewModel
 
-/**
- * Login screen. Mirrors the "Login" frame of the wireframe:
- * "E-taraina" title, username + password fields, green Login CTA.
- *
- * @param onLoginSuccess called with the username and role once login
- * succeeds, so the caller (nav graph) can route to Home-user or Home-admin.
- */
+// écran de login. onLoginSuccess renvoie le username + le rôle, c'est le
+// nav graph qui décide où on atterrit ensuite (Home-user ou Home-admin)
 @Composable
 fun LoginScreen(
     onLoginSuccess: (username: String, role: UserRole) -> Unit,

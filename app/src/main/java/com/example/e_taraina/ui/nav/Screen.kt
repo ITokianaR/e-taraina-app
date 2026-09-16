@@ -10,8 +10,7 @@ sealed class Screen(val route: String) {
 
     data object ReportList : Screen("report_list")
 
-    // Reserved for when the remaining wireframe screens are wired up:
+    // reste à faire, pas encore branché :
     // data object HomeAdmin : Screen("home_admin")
-    // data object FillReport : Screen("fill_report")
     // data object ReportDetails : Screen("report_details/{id}")
 }

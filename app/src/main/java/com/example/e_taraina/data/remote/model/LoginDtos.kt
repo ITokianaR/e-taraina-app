@@ -1,10 +1,7 @@
 package com.example.e_taraina.data.remote.model
 
-/**
- * Wire-format models for the login endpoint.
- * Kept separate from domain.models.User so the API shape can change
- * without touching the rest of the app.
- */
+// modèles pour l'API de login, séparés de domain.models.User pour pouvoir
+// changer le format de l'API sans impacter le reste de l'app
 data class LoginRequestDto(
     val username: String,
     val password: String

@@ -1,4 +1,3 @@
-// Theme.kt
 package com.example.e_taraina.ui.common.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme

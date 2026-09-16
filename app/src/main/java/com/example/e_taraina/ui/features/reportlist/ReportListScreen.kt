@@ -13,6 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -20,17 +23,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.e_taraina.data.Complaint
 import com.example.e_taraina.data.ComplaintStore
+import com.example.e_taraina.ui.common.components.ComplaintFormDialog
+import com.example.e_taraina.ui.common.components.ETarainaButton
 import com.example.e_taraina.ui.common.theme.ETarainaGray
 
-/**
- * Report-list screen. Mirrors the "Report-list" frame: a "Report list"
- * title followed by one card per submitted complaint, and the gray
- * bottom bar. Reads straight from [ComplaintStore], so it shows exactly
- * what was filled in through the "Fill a complaint" popup.
- */
+// écran Report-list, calqué sur la maquette : titre "Report list" puis une
+// carte par plainte enregistrée, chacune avec un bouton pour la modifier
 @Composable
 fun ReportListScreen() {
     val complaints by ComplaintStore.complaints.collectAsState()
+    var editingComplaint by remember { mutableStateOf<Complaint?>(null) }
+
+    editingComplaint?.let { complaint ->
+        ComplaintFormDialog(
+            initialComplaint = complaint,
+            onDismiss = { editingComplaint = null },
+            onSubmit = {
+                ComplaintStore.update(it)
+                editingComplaint = null
+            }
+        )
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -54,13 +67,15 @@ fun ReportListScreen() {
                 )
             } else {
                 complaints.forEach { complaint ->
-                    ComplaintCard(complaint)
+                    ComplaintCard(
+                        complaint = complaint,
+                        onEditClick = { editingComplaint = complaint }
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
 
-        // gray bottom bar, like the other screens in the wireframe
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,7 +86,7 @@ fun ReportListScreen() {
 }
 
 @Composable
-private fun ComplaintCard(complaint: Complaint) {
+private fun ComplaintCard(complaint: Complaint, onEditClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,5 +124,12 @@ private fun ComplaintCard(complaint: Complaint) {
                 contentScale = ContentScale.Crop
             )
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ETarainaButton(
+            text = "Modifier",
+            onClick = onEditClick
+        )
     }
 }

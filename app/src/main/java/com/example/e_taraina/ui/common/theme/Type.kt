@@ -1,4 +1,3 @@
-// Type.kt
 package com.example.e_taraina.ui.common.theme
 
 import androidx.compose.material3.Typography

@@ -4,21 +4,13 @@ import com.example.e_taraina.data.remote.model.LoginRequestDto
 import com.example.e_taraina.data.remote.model.LoginResponseDto
 import kotlinx.coroutines.delay
 
-/**
- * Temporary in-memory data source so the login flow is fully
- * functional before the real backend exists.
- *
- * Behaviour: any non-blank username/password succeeds. Logging in
- * with the username "admin" returns the ADMIN role (routes to
- * Home-admin); anything else returns USER (routes to Home-user).
- *
- * Replace the body of [login] with a real call to [AuthApiService]
- * once the backend endpoint is ready — nothing above this layer needs
- * to change.
- */
+// mock en attendant le vrai backend. N'importe quel username/password
+// non vide passe, et "admin" donne le rôle ADMIN, le reste USER.
+// à remplacer par un vrai appel à AuthApiService plus tard, le reste
+// de l'app n'aura rien à changer
 class AuthRemoteDataSource {
     suspend fun login(request: LoginRequestDto): LoginResponseDto {
-        delay(600) // simulate network latency
+        delay(600) // simule la latence réseau
 
         if (request.password.length < 4) {
             throw IllegalArgumentException("Password must be at least 4 characters")

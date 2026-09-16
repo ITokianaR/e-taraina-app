@@ -3,10 +3,8 @@ package com.example.e_taraina.domain.usecase
 import com.example.e_taraina.domain.models.User
 import com.example.e_taraina.domain.repository.AuthRepository
 
-/**
- * Encapsulates the "log a user in" business rule so the ViewModel
- * stays free of validation/repository details.
- */
+// logique du login mise ici plutôt que dans le ViewModel, comme ça il
+// reste simple et ne fait que gérer l'état de l'écran
 class LoginUseCase(
     private val repository: AuthRepository
 ) {
