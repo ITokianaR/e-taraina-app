@@ -7,7 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.e_taraina.domain.models.UserRole
 import com.example.e_taraina.ui.features.home.HomeScreen
+import com.example.e_taraina.ui.features.homeadmin.HomeAdminScreen
 import com.example.e_taraina.ui.features.login.LoginScreen
 import com.example.e_taraina.ui.features.reportlist.ReportListScreen
 
@@ -21,10 +23,13 @@ fun ETarainaNavGraph(
     ) {
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginSuccess = { username, _ ->
-                    // TODO: gérer le rôle ici pour envoyer les admins sur Home-admin,
-                    // pour l'instant tout le monde atterrit sur Home-user
-                    navController.navigate(Screen.Home.createRoute(username)) {
+                onLoginSuccess = { username, role ->
+                    val destination = if (role == UserRole.ADMIN) {
+                        Screen.HomeAdmin.route
+                    } else {
+                        Screen.Home.createRoute(username)
+                    }
+                    navController.navigate(destination) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
@@ -40,12 +45,19 @@ fun ETarainaNavGraph(
                 username = username,
                 onComplaintSubmitted = {
                     navController.navigate(Screen.ReportList.route)
+                },
+                onViewComplaintsClick = {
+                    navController.navigate(Screen.ReportList.route)
                 }
             )
         }
 
         composable(Screen.ReportList.route) {
             ReportListScreen()
+        }
+
+        composable(Screen.HomeAdmin.route) {
+            HomeAdminScreen()
         }
     }
 }

@@ -10,7 +10,8 @@ sealed class Screen(val route: String) {
 
     data object ReportList : Screen("report_list")
 
+    data object HomeAdmin : Screen("home_admin")
+
     // reste à faire, pas encore branché :
-    // data object HomeAdmin : Screen("home_admin")
     // data object ReportDetails : Screen("report_details/{id}")
 }
