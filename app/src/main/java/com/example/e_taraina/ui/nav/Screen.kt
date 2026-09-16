@@ -8,9 +8,10 @@ sealed class Screen(val route: String) {
         fun createRoute(username: String) = "home/$username"
     }
 
+    data object ReportList : Screen("report_list")
+
     // Reserved for when the remaining wireframe screens are wired up:
     // data object HomeAdmin : Screen("home_admin")
     // data object FillReport : Screen("fill_report")
-    // data object ReportList : Screen("report_list")
     // data object ReportDetails : Screen("report_details/{id}")
 }

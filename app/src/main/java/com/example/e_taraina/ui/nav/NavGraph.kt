@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.e_taraina.ui.features.home.HomeScreen
 import com.example.e_taraina.ui.features.login.LoginScreen
+import com.example.e_taraina.ui.features.reportlist.ReportListScreen
 
 @Composable
 fun ETarainaNavGraph(
@@ -36,7 +37,16 @@ fun ETarainaNavGraph(
             arguments = listOf(navArgument(Screen.Home.ARG_USERNAME) { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString(Screen.Home.ARG_USERNAME).orEmpty()
-            HomeScreen(username = username)
+            HomeScreen(
+                username = username,
+                onComplaintSubmitted = {
+                    navController.navigate(Screen.ReportList.route)
+                }
+            )
+        }
+
+        composable(Screen.ReportList.route) {
+            ReportListScreen()
         }
     }
 }
