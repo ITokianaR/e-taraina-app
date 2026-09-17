@@ -20,11 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.e_taraina.data.Complaint
 import com.example.e_taraina.data.ComplaintStore
+import com.example.e_taraina.ui.common.components.ETarainaButton
 import com.example.e_taraina.ui.common.theme.ETarainaGray
 
 // écran Home-admin, calqué sur la maquette : même liste que Report-list
-// côté user, mais juste pour consulter pour l'instant (pas de Modifier/
-// Supprimer ici, ça viendra avec Report-details et "Validate complaint")
+// côté user, mais l'admin peut juste supprimer pour l'instant (pas de
+// Modifier ici, ça reste réservé à l'utilisateur qui a fait le report)
 @Composable
 fun HomeAdminScreen() {
     val complaints by ComplaintStore.complaints.collectAsState()
@@ -51,7 +52,10 @@ fun HomeAdminScreen() {
                 )
             } else {
                 complaints.forEach { complaint ->
-                    ComplaintPreview(complaint)
+                    ComplaintPreview(
+                        complaint = complaint,
+                        onDeleteClick = { ComplaintStore.delete(complaint.id) }
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -67,7 +71,7 @@ fun HomeAdminScreen() {
 }
 
 @Composable
-private fun ComplaintPreview(complaint: Complaint) {
+private fun ComplaintPreview(complaint: Complaint, onDeleteClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,5 +101,12 @@ private fun ComplaintPreview(complaint: Complaint) {
                 contentScale = ContentScale.Crop
             )
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ETarainaButton(
+            text = "Supprimer",
+            onClick = onDeleteClick
+        )
     }
 }
