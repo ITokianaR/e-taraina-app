@@ -48,6 +48,7 @@ fun HomeScreen(
     onFillComplaintClick: () -> Unit = {},
     onComplaintSubmitted: () -> Unit = {},
     onViewComplaintsClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -164,5 +165,19 @@ fun HomeScreen(
                 .height(6.dp)
                 .background(ETarainaGray)
         )
+
+        // --- Déconnexion : ancrée en haut à droite, indépendamment du
+        // contenu centré, comme sur Home-admin.
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 16.dp, end = 16.dp)
+                .width(110.dp)
+        ) {
+            ETarainaButton(
+                text = "Déconnexion",
+                onClick = onLogoutClick
+            )
+        }
     }
 }

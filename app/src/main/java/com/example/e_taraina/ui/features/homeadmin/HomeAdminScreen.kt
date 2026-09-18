@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,7 +39,7 @@ import com.example.e_taraina.ui.common.theme.ETarainaWhite
 // traité) et cartes de report avec un vrai suivi en 3 étapes :
 // reçu -> en cours -> traité, plutôt qu'un simple bouton "valider"
 @Composable
-fun HomeAdminScreen() {
+fun HomeAdminScreen(onLogoutClick: () -> Unit = {}) {
     val complaints by ComplaintStore.complaints.collectAsState()
     val receivedCount = complaints.count { it.status == ComplaintStatus.RECEIVED }
     val inProgressCount = complaints.count { it.status == ComplaintStatus.IN_PROGRESS }
@@ -51,11 +52,27 @@ fun HomeAdminScreen() {
                 .fillMaxWidth()
                 .padding(24.dp)
         ) {
-            Text(
-                text = "Liste des réclamations",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Liste des réclamations",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(modifier = Modifier.width(110.dp)) {
+                    ETarainaButton(
+                        text = "Déconnexion",
+                        onClick = onLogoutClick
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

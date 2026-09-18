@@ -48,6 +48,11 @@ fun ETarainaNavGraph(
                 },
                 onViewComplaintsClick = {
                     navController.navigate(Screen.ReportList.route)
+                },
+                onLogoutClick = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0)
+                    }
                 }
             )
         }
@@ -57,7 +62,13 @@ fun ETarainaNavGraph(
         }
 
         composable(Screen.HomeAdmin.route) {
-            HomeAdminScreen()
+            HomeAdminScreen(
+                onLogoutClick = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0)
+                    }
+                }
+            )
         }
     }
 }
