@@ -56,7 +56,7 @@ fun ComplaintFormDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initialComplaint != null) "Edit complaint" else "Fill a complaint") },
+        title = { Text(if (initialComplaint != null) "Modifier la réclamation" else "Faire une réclamation") },
         text = {
             Column {
                 ETarainaTextField(
@@ -70,7 +70,7 @@ fun ComplaintFormDialog(
                 ETarainaTextField(
                     value = place,
                     onValueChange = { place = it },
-                    label = "Place"
+                    label = "Lieu"
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -79,7 +79,7 @@ fun ComplaintFormDialog(
                 if (photo != null) {
                     Image(
                         bitmap = photo.asImageBitmap(),
-                        contentDescription = "Selected photo",
+                        contentDescription = "Photo sélectionnée",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(160.dp),
@@ -89,7 +89,7 @@ fun ComplaintFormDialog(
                 }
 
                 ETarainaButton(
-                    text = if (photo != null) "Change photo" else "Choose photo",
+                    text = if (photo != null) "Changer la photo" else "Choisir une photo",
                     onClick = {
                         photoPicker.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -110,7 +110,7 @@ fun ComplaintFormDialog(
         },
         confirmButton = {
             ETarainaButton(
-                text = if (initialComplaint != null) "Save" else "Submit",
+                text = if (initialComplaint != null) "Enregistrer" else "Envoyer",
                 onClick = {
                     onSubmit(
                         Complaint(
@@ -128,7 +128,7 @@ fun ComplaintFormDialog(
         },
         dismissButton = {
             ETarainaButton(
-                text = "Cancel",
+                text = "Annuler",
                 onClick = onDismiss,
                 containerColor = ETarainaGray,
                 contentColor = ETarainaBlack

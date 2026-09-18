@@ -59,7 +59,7 @@ class LoginViewModel @JvmOverloads constructor(
                 }
                 .onFailure { error ->
                     _uiState.update {
-                        it.copy(isLoading = false, errorMessage = error.message ?: "Login failed")
+                        it.copy(isLoading = false, errorMessage = error.message ?: "Échec de la connexion")
                     }
                 }
         }

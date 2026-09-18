@@ -61,7 +61,7 @@ fun LoginScreen(
         ETarainaTextField(
             value = uiState.username,
             onValueChange = viewModel::onUsernameChange,
-            label = "Username",
+            label = "Nom d'utilisateur",
             isError = uiState.errorMessage != null
         )
 
@@ -70,7 +70,7 @@ fun LoginScreen(
         ETarainaTextField(
             value = uiState.password,
             onValueChange = viewModel::onPasswordChange,
-            label = "Password",
+            label = "Mot de passe",
             isPassword = true,
             isError = uiState.errorMessage != null,
             supportingText = uiState.errorMessage
@@ -79,7 +79,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         ETarainaButton(
-            text = "Login",
+            text = "Connexion",
             onClick = viewModel::onLoginClick,
             containerColor = ETarainaGreen,
             contentColor = Color.Black,

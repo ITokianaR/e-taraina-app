@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.e_taraina.data.Complaint
+import com.example.e_taraina.data.ComplaintStatus
 import com.example.e_taraina.data.ComplaintStore
 import com.example.e_taraina.ui.common.components.ComplaintFormDialog
 import com.example.e_taraina.ui.common.components.ETarainaButton
@@ -53,7 +54,7 @@ fun ReportListScreen() {
                 .padding(24.dp)
         ) {
             Text(
-                text = "Report list",
+                text = "Liste des réclamations",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -62,7 +63,7 @@ fun ReportListScreen() {
 
             if (complaints.isEmpty()) {
                 Text(
-                    text = "No report yet",
+                    text = "Aucune réclamation pour l'instant",
                     style = MaterialTheme.typography.bodyMedium
                 )
             } else {
@@ -99,14 +100,20 @@ private fun ComplaintCard(
             .padding(12.dp)
     ) {
         Text(
-            text = complaint.cause.ifBlank { "(no cause)" },
+            text = complaint.cause.ifBlank { "(pas de cause)" },
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold
         )
 
         Text(
-            text = complaint.place.ifBlank { "(no place)" },
+            text = complaint.place.ifBlank { "(pas de lieu)" },
             style = MaterialTheme.typography.bodyMedium
+        )
+
+        Text(
+            text = if (complaint.status == ComplaintStatus.VALIDATED) "Validée" else "En attente",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold
         )
 
         if (complaint.description.isNotBlank()) {
@@ -122,7 +129,7 @@ private fun ComplaintCard(
             Spacer(modifier = Modifier.height(8.dp))
             Image(
                 bitmap = photo.asImageBitmap(),
-                contentDescription = "Complaint photo",
+                contentDescription = "Photo de la réclamation",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),

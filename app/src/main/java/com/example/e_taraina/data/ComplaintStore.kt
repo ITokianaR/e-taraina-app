@@ -7,13 +7,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
+// une plainte reste en attente tant que l'admin ne l'a pas validée
+enum class ComplaintStatus {
+    PENDING,
+    VALIDATED
+}
+
 // une plainte remplie via le popup "Fill a complaint"
 data class Complaint(
     val id: String = UUID.randomUUID().toString(),
     val cause: String,
     val place: String,
     val description: String,
-    val photo: Bitmap? = null
+    val photo: Bitmap? = null,
+    val status: ComplaintStatus = ComplaintStatus.PENDING
 )
 
 // stocke les plaintes en mémoire le temps que l'app tourne, pas de vraie base
@@ -35,5 +42,12 @@ object ComplaintStore {
 
     fun delete(id: String) {
         _complaints.update { list -> list.filter { it.id != id } }
+    }
+
+    // passe une plainte en "validée", utilisé par le bouton de l'admin
+    fun validate(id: String) {
+        _complaints.update { list ->
+            list.map { if (it.id == id) it.copy(status = ComplaintStatus.VALIDATED) else it }
+        }
     }
 }

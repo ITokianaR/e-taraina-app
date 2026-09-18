@@ -10,7 +10,7 @@ class LoginUseCase(
 ) {
     suspend operator fun invoke(username: String, password: String): Result<User> {
         if (username.isBlank() || password.isBlank()) {
-            return Result.failure(IllegalArgumentException("Username and password can't be empty"))
+            return Result.failure(IllegalArgumentException("Le nom d'utilisateur et le mot de passe sont obligatoires"))
         }
         return repository.login(username.trim(), password)
     }

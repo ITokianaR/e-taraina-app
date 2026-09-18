@@ -95,7 +95,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = "Welcome to",
+                        text = "Bienvenue sur",
                         style = MaterialTheme.typography.titleSmall,
                         color = ETarainaWhite.copy(alpha = 0.7f),
                         textAlign = TextAlign.Center
@@ -119,7 +119,7 @@ fun HomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Have an issue to report?",
+                        text = "Un problème à signaler ?",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = ETarainaWhite.copy(alpha = 0.85f),
@@ -127,7 +127,7 @@ fun HomeScreen(
                     )
 
                     ETarainaButton(
-                        text = "Fill a complaint",
+                        text = "Faire une réclamation",
                         onClick = {
                             showComplaintDialog = true
                             onFillComplaintClick()
@@ -137,7 +137,7 @@ fun HomeScreen(
                     )
 
                     ETarainaButton(
-                        text = "View complaints",
+                        text = "Voir les réclamations",
                         onClick = onViewComplaintsClick
                     )
                 }

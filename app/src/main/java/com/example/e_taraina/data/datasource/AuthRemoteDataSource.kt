@@ -13,7 +13,7 @@ class AuthRemoteDataSource {
         delay(600) // simule la latence réseau
 
         if (request.password.length < 4) {
-            throw IllegalArgumentException("Password must be at least 4 characters")
+            throw IllegalArgumentException("Le mot de passe doit contenir au moins 4 caractères")
         }
 
         val role = if (request.username.equals("admin", ignoreCase = true)) "ADMIN" else "USER"
