@@ -7,10 +7,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
-// une plainte reste en attente tant que l'admin ne l'a pas validée
+// suivi du traitement d'une plainte côté admin : reçu -> en cours -> traité
 enum class ComplaintStatus {
-    PENDING,
-    VALIDATED
+    RECEIVED,
+    IN_PROGRESS,
+    DONE
 }
 
 // une plainte remplie via le popup "Fill a complaint"
@@ -20,7 +21,7 @@ data class Complaint(
     val place: String,
     val description: String,
     val photo: Bitmap? = null,
-    val status: ComplaintStatus = ComplaintStatus.PENDING
+    val status: ComplaintStatus = ComplaintStatus.RECEIVED
 )
 
 // stocke les plaintes en mémoire le temps que l'app tourne, pas de vraie base
@@ -44,10 +45,11 @@ object ComplaintStore {
         _complaints.update { list -> list.filter { it.id != id } }
     }
 
-    // passe une plainte en "validée", utilisé par le bouton de l'admin
-    fun validate(id: String) {
+    // change le statut de suivi d'une plainte (reçu / en cours / traité),
+    // utilisé par les boutons d'avancement côté admin
+    fun updateStatus(id: String, status: ComplaintStatus) {
         _complaints.update { list ->
-            list.map { if (it.id == id) it.copy(status = ComplaintStatus.VALIDATED) else it }
+            list.map { if (it.id == id) it.copy(status = status) else it }
         }
     }
 }

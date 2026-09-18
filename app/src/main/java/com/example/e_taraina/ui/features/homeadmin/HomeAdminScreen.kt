@@ -29,18 +29,20 @@ import com.example.e_taraina.data.ComplaintStatus
 import com.example.e_taraina.data.ComplaintStore
 import com.example.e_taraina.ui.common.components.ETarainaButton
 import com.example.e_taraina.ui.common.theme.ETarainaBlack
+import com.example.e_taraina.ui.common.theme.ETarainaBlue
 import com.example.e_taraina.ui.common.theme.ETarainaGray
 import com.example.e_taraina.ui.common.theme.ETarainaGreen
 import com.example.e_taraina.ui.common.theme.ETarainaWhite
 
-// écran Home-admin. Ajout d'une carte de stats en haut (total / traité /
-// en attente) et des cartes de report retravaillées (coins arrondis,
-// badge de statut coloré) pour que ça fasse moins brut que la V1.
+// écran Home-admin. Carte de stats en haut (total / reçu / en cours /
+// traité) et cartes de report avec un vrai suivi en 3 étapes :
+// reçu -> en cours -> traité, plutôt qu'un simple bouton "valider"
 @Composable
 fun HomeAdminScreen() {
     val complaints by ComplaintStore.complaints.collectAsState()
-    val validatedCount = complaints.count { it.status == ComplaintStatus.VALIDATED }
-    val pendingCount = complaints.size - validatedCount
+    val receivedCount = complaints.count { it.status == ComplaintStatus.RECEIVED }
+    val inProgressCount = complaints.count { it.status == ComplaintStatus.IN_PROGRESS }
+    val doneCount = complaints.count { it.status == ComplaintStatus.DONE }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -59,8 +61,9 @@ fun HomeAdminScreen() {
 
             StatsCard(
                 total = complaints.size,
-                validated = validatedCount,
-                pending = pendingCount
+                received = receivedCount,
+                inProgress = inProgressCount,
+                done = doneCount
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -74,7 +77,14 @@ fun HomeAdminScreen() {
                 complaints.forEach { complaint ->
                     ComplaintPreview(
                         complaint = complaint,
-                        onValidateClick = { ComplaintStore.validate(complaint.id) },
+                        onAdvanceClick = {
+                            val next = when (complaint.status) {
+                                ComplaintStatus.RECEIVED -> ComplaintStatus.IN_PROGRESS
+                                ComplaintStatus.IN_PROGRESS -> ComplaintStatus.DONE
+                                ComplaintStatus.DONE -> ComplaintStatus.DONE
+                            }
+                            ComplaintStore.updateStatus(complaint.id, next)
+                        },
                         onDeleteClick = { ComplaintStore.delete(complaint.id) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -91,21 +101,22 @@ fun HomeAdminScreen() {
     }
 }
 
-// petit dashboard : total à gauche, traité / en attente à droite,
-// pour que l'admin voie d'un coup d'œil où en est la charge de travail
+// petit dashboard avec les 4 chiffres clés, pour que l'admin voie d'un
+// coup d'œil où en est la charge de travail
 @Composable
-private fun StatsCard(total: Int, validated: Int, pending: Int) {
+private fun StatsCard(total: Int, received: Int, inProgress: Int, done: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(ETarainaBlack)
-            .padding(vertical = 18.dp, horizontal = 12.dp),
+            .padding(vertical = 18.dp, horizontal = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         StatItem(label = "Total", value = total, valueColor = ETarainaWhite)
-        StatItem(label = "Validées", value = validated, valueColor = ETarainaGreen)
-        StatItem(label = "En attente", value = pending, valueColor = ETarainaWhite)
+        StatItem(label = "Reçu", value = received, valueColor = ETarainaWhite)
+        StatItem(label = "En cours", value = inProgress, valueColor = ETarainaBlue)
+        StatItem(label = "Traité", value = done, valueColor = ETarainaGreen)
     }
 }
 
@@ -131,7 +142,7 @@ private fun StatItem(label: String, value: Int, valueColor: androidx.compose.ui.
 @Composable
 private fun ComplaintPreview(
     complaint: Complaint,
-    onValidateClick: () -> Unit,
+    onAdvanceClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     Column(
@@ -180,10 +191,16 @@ private fun ComplaintPreview(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (complaint.status == ComplaintStatus.PENDING) {
+        if (complaint.status != ComplaintStatus.DONE) {
+            val nextLabel = when (complaint.status) {
+                ComplaintStatus.RECEIVED -> "Passer en cours"
+                ComplaintStatus.IN_PROGRESS -> "Marquer comme traité"
+                ComplaintStatus.DONE -> ""
+            }
+
             ETarainaButton(
-                text = "Valider la réclamation",
-                onClick = onValidateClick,
+                text = nextLabel,
+                onClick = onAdvanceClick,
                 containerColor = ETarainaGreen
             )
 
@@ -197,19 +214,26 @@ private fun ComplaintPreview(
     }
 }
 
-// petite pastille de statut, vert si validé, gris sinon, plus lisible
-// qu'un simple mot dans le corps de la carte
+// pastille de statut, une couleur par étape du suivi : gris pour reçu,
+// bleu pour en cours, vert pour traité
 @Composable
 private fun StatusBadge(status: ComplaintStatus) {
-    val isValidated = status == ComplaintStatus.VALIDATED
-    val backgroundColor = if (isValidated) ETarainaGreen else ETarainaGray
-    val textColor = if (isValidated) ETarainaBlack else ETarainaBlack.copy(alpha = 0.7f)
+    val backgroundColor = when (status) {
+        ComplaintStatus.RECEIVED -> ETarainaGray
+        ComplaintStatus.IN_PROGRESS -> ETarainaBlue
+        ComplaintStatus.DONE -> ETarainaGreen
+    }
+    val label = when (status) {
+        ComplaintStatus.RECEIVED -> "Reçu"
+        ComplaintStatus.IN_PROGRESS -> "En cours"
+        ComplaintStatus.DONE -> "Traité"
+    }
 
     Text(
-        text = if (isValidated) "Validée" else "En attente",
+        text = label,
         style = MaterialTheme.typography.bodyMedium,
         fontWeight = FontWeight.SemiBold,
-        color = textColor,
+        color = ETarainaBlack,
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .background(backgroundColor)

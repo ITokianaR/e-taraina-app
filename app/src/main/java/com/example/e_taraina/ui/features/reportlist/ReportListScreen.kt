@@ -111,7 +111,11 @@ private fun ComplaintCard(
         )
 
         Text(
-            text = if (complaint.status == ComplaintStatus.VALIDATED) "Validée" else "En attente",
+            text = when (complaint.status) {
+                ComplaintStatus.RECEIVED -> "Reçu"
+                ComplaintStatus.IN_PROGRESS -> "En cours"
+                ComplaintStatus.DONE -> "Traité"
+            },
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold
         )
